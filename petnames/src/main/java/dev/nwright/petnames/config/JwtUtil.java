@@ -2,6 +2,7 @@ package dev.nwright.petnames.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +14,17 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
+import java.security.Key;
+
 @Service
 public class JwtUtil {
 
 	// TODO Make a real secret key and hide it from github!!!
 	private final String SECRET_KEY = "4390q7ghr4lknvasio4rkjlhfbndvsaasdf23ern0a789wcffjqfk34hg9087qhwef";
+	// private final Key key = SECRET_KEY;
+	private final SecretKey testKey = Jwts.SIG.HS256.key().build();
 
 	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);
@@ -45,17 +52,19 @@ public class JwtUtil {
 		return createToken(claims, userDetails.getUsername());
 	}
 
-  private String createToken(Map<String, Object> claims, String subject) {
-    return Jwts.builder()
-        .setClaims(claims)
-        .setSubject(subject)
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
-        .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
-  }
+	private String createToken(Map<String, Object> claims, String subject) {
+		return Jwts.builder()
+				.subject(subject)
+				.claims(claims)
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+				.signWith(SECRET_KEY)
+				.compact();
+	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
+		Jwts.parser().verifyWith(this.testKey).build().parseSignedClaims(token).getPayload().getSubject().equals("Joe");
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 }
