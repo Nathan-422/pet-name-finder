@@ -24,7 +24,7 @@ public class JwtUtil {
 	// TODO Make a real secret key and hide it from github!!!
 	private final String SECRET_KEY = "4390q7ghr4lknvasio4rkjlhfbndvsaasdf23ern0a789wcffjqfk34hg9087qhwef";
 	// private final Key key = SECRET_KEY;
-	private final SecretKey testKey = Jwts.SIG.HS256.key().build();
+	private final SecretKey signingKey = Jwts.SIG.HS256.key().build();
 
 	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);
@@ -58,13 +58,13 @@ public class JwtUtil {
 				.claims(claims)
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
-				.signWith(SECRET_KEY)
+				.signWith(signingKey)
 				.compact();
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		Jwts.parser().verifyWith(this.testKey).build().parseSignedClaims(token).getPayload().getSubject().equals("Joe");
+		Jwts.parser().verifyWith(this.signingKey).build().parseSignedClaims(token).getPayload().getSubject().equals("Joe");
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 }
