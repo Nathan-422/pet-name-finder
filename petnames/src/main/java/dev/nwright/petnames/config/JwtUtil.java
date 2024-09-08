@@ -40,7 +40,11 @@ public class JwtUtil {
 	}
 
 	private Claims extractAllClaims(String token) {
-		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+		return Jwts.parser()
+				.verifyWith(this.signingKey)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload();
 	}
 
 	private Boolean isTokenExpired(String token) {
