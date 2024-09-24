@@ -1,7 +1,9 @@
 package dev.nwright.petnames.models;
 
-public class User {
+import jakarta.persistence.*;
 
+@Entity
+public class User extends AbstractEntity {
   private String username;
   private String password;
 
