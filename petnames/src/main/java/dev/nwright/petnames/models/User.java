@@ -1,6 +1,6 @@
 package dev.nwright.petnames.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 @Entity
 public class User extends AbstractEntity {
