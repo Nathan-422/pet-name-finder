@@ -1,8 +1,17 @@
 package dev.nwright.petnames.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.http.HttpHeaders;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+
+//import jakarta.servlet.http.HttpServletRequest;
 
 @Entity
+@Table(name = "USERS")
+@CrossOrigin(origins = "http://localhost:4200") // , allowCredentials = "true")
 public class User extends AbstractEntity {
   private String username;
   private String password;
