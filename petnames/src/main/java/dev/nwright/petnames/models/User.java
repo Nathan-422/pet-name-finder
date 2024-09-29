@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "http://localhost:4200") // , allowCredentials = "true")
 public class User extends AbstractEntity {
   private String username;
+  private String email;
   private String password;
 
-  public User(String username, String password) {
+  public User() {
+  }
+
+  public User(String username, String email, String password) {
     this.username = username;
     this.password = password;
   }
@@ -33,7 +37,15 @@ public class User extends AbstractEntity {
     return this.password;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setPassword(String email) {
+    this.password = email;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 }
