@@ -30,7 +30,7 @@ build/
 !**/src/test/**/build/
 
 ### Spring ###
-application-dev.properties
+application-*.properties
 
 ### VS Code ###
 .vscode/
